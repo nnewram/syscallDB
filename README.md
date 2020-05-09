@@ -1,6 +1,6 @@
 # syscallDB
 ## x86 and x64 syscall database
-Have you ever been doing some assembly and finding yourself looking furiously for some nisch syscall
+Have you ever been doing some assembly and finding yourself looking furiously for some nisch syscall\
 Well, that will no longer be a problem with syscallDB's reverse lookup, did you forget rax for execve?
 ```py
 python3 syscallLookup.py -r
@@ -23,4 +23,8 @@ rdx: __user
 r10: *filenameconst
 r8: char
 r9: __user
+```
+## Installation
+```
+git clone https://github.com/marwenn02/syscallDB/
 ```
