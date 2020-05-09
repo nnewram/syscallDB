@@ -25,6 +25,11 @@ r8: char
 r9: __user
 ```
 ## Installation
-```
+```sh
 git clone https://github.com/marwenn02/syscallDB/
+echo "this part is optional, but pickles should not be trusted."
+cd syscallDB/syscallLookup/scrape
+python3 syscallScrapex64.py
+python3 syscallScrapex86.py
+cd ..
 ```
