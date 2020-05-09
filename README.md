@@ -2,7 +2,8 @@
 ## x86 and x64 syscall database
 Have you ever been doing some assembly and finding yourself looking furiously for some nisch syscall\
 Well, that will no longer be a problem with syscallDB's reverse lookup, did you forget rax for execve?
-```py
+## x86
+```sh
 python3 syscallLookup.py -r
 Syscall: execve
 
@@ -24,6 +25,28 @@ r10: *filenameconst
 r8: char
 r9: __user
 ```
+## x64
+```sh
+python3 syscallLookup.py -32 -r
+Syscall: exec
+
+syscall: sys_execve
+eax: 11
+ebx: char __user *
+ecx: char __user *__user *
+edx: char __user *__user *
+esi: struct pt_regs *
+edi: 
+
+syscall: sys_kexec_load
+eax: 263
+ebx: unsigned long entry
+ecx: unsigned long nr_segments
+edx: struct kexec_segment __user *segments
+esi: unsigned long flags
+edi:
+```
+
 ## Installation
 ```sh
 git clone https://github.com/marwenn02/syscallDB/
