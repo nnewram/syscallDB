@@ -22,6 +22,6 @@ for syscall in syscalls:
         sysdict[number] = text.split(" ")
 print(sysdict)
 
-with open("scraped.pickle", "wb") as pickleHandle:
+with open("../scrapedx86.pickle", "wb") as pickleHandle:
     pickle.dump(sysdict, pickleHandle, protocol=pickle.HIGHEST_PROTOCOL)
 print("done")
