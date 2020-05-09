@@ -6,6 +6,7 @@ with open("scraped.pickle", "rb") as scrapeHandle:
 
 def printSyscall(key):
     try:
+        print("")
         print("syscall: " + scraped[key][0])
         print("rax: " + str(key))
         print("rdi: " + scraped[key][1])
@@ -22,12 +23,10 @@ if "--reverse" in sys.argv or "-r" in sys.argv:
     key = 0
     for x in reverse:
         if toSearch in x.lower():
-            break 
+            printSyscall(key)
+            key += 1
+            continue
         key += 1
-    else:
-        print("Not found")
-        exit(1)
-    printSyscall(key)
 else:
     index = int(input("Syscall number: "))
     printSyscall(index)
