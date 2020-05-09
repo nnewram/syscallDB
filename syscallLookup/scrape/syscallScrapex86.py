@@ -9,17 +9,11 @@ soup = BeautifulSoup(response.text, "html.parser")
 syscalls = soup.findAll("tr")[1:]
 sysdict = {}
 
-def separate(text):
-    i = 0
-    while (ord(text[i]) >= 48) and (ord(text[i]) <= 57):
-        i += 1
-    numberPart = text[:i]
-    textPart = text[i:]
-    return int(numberPart), textPart
-
 for syscall in syscalls:
-        number, text = separate(syscall.text)
-        sysdict[number] = text.split(" ")
+    sysarr = str(syscall).split("</td><td>")
+    sysarr[0] = int(sysarr[0].split(">")[-1])
+    sysarr = [x for x in sysarr if "<" not in str(x) and x != ""]
+    sysdict[sysarr[0]] = sysarr[1:]
 print(sysdict)
 
 with open("../scrapedx86.pickle", "wb") as pickleHandle:
