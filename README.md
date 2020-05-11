@@ -32,6 +32,13 @@ $ python3
 >>> sysDB.syscallPPC(4)
 {'syscall': 'write', 'r0': 4, 'r3': 'unsigned int fd', 'r4': 'const char *buf', 'r5': 'size_t count', 'r6': '', 'r7': '', 'r8': ''}
 ```
+### mips n64
+```py
+$ python3
+>>> import sysDB
+>>> sysDb.syscallMips64(5009)
+{'syscall': 'sys_mmap', 'v0': 5009, 'a0': 'struct mmap_arg_struct', 'a1': '', 'a2': '', 'a3': '', 'a4': '', 'a5': ''}
+```
 ## Installation
 sysDB now also exists as a python package, install with
 `python3 -m pip install sysDB`
@@ -47,5 +54,7 @@ cd ../x86_64
 python3 syscallScrapex86.py
 cd ../powerpc/
 python3 syscallScrapePowerpc.py
+cd ../mips64/
+python3 syscallScrapeMips64.py
 cd ../../../
 ```
