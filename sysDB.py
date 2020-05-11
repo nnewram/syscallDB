@@ -75,7 +75,7 @@ def _reverseLookup(string, arch):
     reverseMax = max(scraped)
 
     for x in reverse:
-        while not scraped.get(key) and key < reverseMax:
+        while key not in scraped and key < reverseMax:
             key += 1 # index might skip sometimes
 
         if string in x.lower():
