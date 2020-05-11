@@ -15,12 +15,11 @@ rdx: const char *const envp[]
 
 syscall: stub_execveatint
 rax: 322
-rdi: dfdconst
-rsi: char
-rdx: __user
-r10: *filenameconst
-r8: char
-r9: __user
+rdi: int dfd
+rsi: const char __user *filename
+rdx: const char __user *const __user *argv
+r10: const char __user *const __user *envp
+r8: int flags
 ```
 ## x64
 ```sh
@@ -42,6 +41,17 @@ ecx: unsigned long nr_segments
 edx: struct kexec_segment __user *segments
 esi: unsigned long flags
 edi:
+```
+## pip
+sysDB now also exists as a python package, install with
+`python3 -m pip install sysDB`
+### Usage
+```
+>>> import sysDB
+>>> sysDB.syscall64("sys_write")
+[{'syscall': 'sys_write', 'rax': 1, 'rdi': 'unsigned int fd', 'rsi': 'const char *buf', 'rdx': 'size_t count'}, {'syscall': 'sys_writev', 'rax': 20, 'rdi': 'unsigned long fd', 'rsi': 'const struct iovec *vec', 'rdx': 'unsigned long vlen'}]
+>>> sysDB.syscall32("execve")
+[{'syscall': 'sys_execve', 'eax': 11, 'ebx': 'char __user *', 'ecx': 'char __user *__user *', 'edx': 'char __user *__user *', 'esi': 'struct pt_regs *', 'edi': ''}]
 ```
 
 ## Installation
