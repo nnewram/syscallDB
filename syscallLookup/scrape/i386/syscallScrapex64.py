@@ -22,6 +22,6 @@ for syscall in syscalls:
     i += 1
 print(cleanedSyscalls)
 
-with open("../scrapedx64.pickle", "wb") as pickleHandle:
+with open("../../scrapedx64.pickle", "wb") as pickleHandle:
     pickle.dump(cleanedSyscalls, pickleHandle, protocol=pickle.HIGHEST_PROTOCOL)
 print("done")
