@@ -9,6 +9,7 @@ sysdict = {}
 
 for syscall in syscalls:
     sysarr = [str(syscall).split("</a>")[0].split(">")[-1]] + str(syscall).replace("</td>", "").replace("\n", "").split("<td>")[2:9]
+    sysarr[0] = "sys_" + sysarr[0]
     sysdict[int(str(syscall).split("</th>")[0].split(">")[-1])] = sysarr
 
 [print(sysdict[x]) for x in sysdict]
