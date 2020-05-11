@@ -9,12 +9,9 @@ Syscall: execve
 
 syscall: sys_execveconst
 rax: 59
-rdi: char
-rsi: *filenameconst
-rdx: char
-r10: *const
-r8: argv[]const
-r9: char
+rdi: const char *filename
+rsi: const char *const argv[]
+rdx: const char *const envp[]
 
 syscall: stub_execveatint
 rax: 322
