@@ -1,0 +1,11 @@
+cd aarch64
+python3 syscallScrapeArm64.py
+cd ../i386
+python3 syscallScrapex64.py
+cd ../x86_64
+python3 syscallScrapex86.py
+cd ../powerpc/
+python3 syscallScrapePowerpc.py
+cd ../mips64/
+python3 syscallScrapeMips64.py
+cd ../../../

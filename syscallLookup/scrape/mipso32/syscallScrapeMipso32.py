@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import pickle
 
-url = "https://syscalls.w3challs.com/?arch=powerpc_64"
+url = "https://syscalls.w3challs.com/?arch=mips_o32"
 response = requests.get(url)
 soup = BeautifulSoup(response.text, "html.parser")
 syscalls = soup.findAll("tr")[2:]
@@ -19,6 +19,6 @@ for syscall in syscalls:
 for x in sysdict:
     print(sysdict[x])
 
-with open("../../scrapedpowerPC.pickle", "wb") as pickleHandle:
+with open("../../scrapedmipso32.pickle", "wb") as pickleHandle:
     pickle.dump(sysdict, pickleHandle, protocol=pickle.HIGHEST_PROTOCOL)
 print("done")

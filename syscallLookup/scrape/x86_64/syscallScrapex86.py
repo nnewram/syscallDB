@@ -15,6 +15,6 @@ for syscall in syscalls:
     sysdict[sysarr[0]] = sysarr[1:]
 print(sysdict)
 
-with open("../../scrapedx86.pickle", "wb") as pickleHandle:
+with open("../../scrapedx86_64.pickle", "wb") as pickleHandle:
     pickle.dump(sysdict, pickleHandle, protocol=pickle.HIGHEST_PROTOCOL)
 print("done")

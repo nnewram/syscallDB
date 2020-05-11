@@ -1,28 +1,16 @@
-def _syscallLookup(key, arch, scraped=""):
-    if scraped == "":
+def _syscallLookup(key, arch, scraped=None):
+    if not scraped:
         if "pickle" not in locals():
             import pickle
-        
-        if arch == "i386":
-            with open("syscallLookup/scrapedx64.pickle", "rb") as scrapeHandle:
-                scraped = pickle.load(scrapeHandle)
-        
-        elif arch == "x86_64":
-            with open("syscallLookup/scrapedx86.pickle", "rb") as scrapeHandle:
-                scraped = pickle.load(scrapeHandle)
-        
-        elif arch == "arm64":
-            with open("syscallLookup/scrapedArm64.pickle", "rb") as scrapeHandle:
-                scraped = pickle.load(scrapeHandle)
-        
-        elif arch == "powerPC":
-            with open("syscallLookup/scrapedpowerpc.pickle", "rb") as scrapeHandle:
-                scraped = pickle.load(scrapeHandle)
-        
-        elif arch == "mips64":
-            with open("syscallLookup/scrapedmips64.pickle", "rb") as scrapeHandle:
-                scraped = pickle.load(scrapeHandle)
     
+        if "os" not in locals():
+            import os
+        
+        location = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
+            
+        with open(os.path.join(location, "syscallLookup/scraped%s.pickle" % arch), "rb") as scrapeHandle:
+            scraped = pickle.load(scrapeHandle)
+
     collected = {}
     
     selectedSyscall = scraped[key]
@@ -49,7 +37,7 @@ def _syscallLookup(key, arch, scraped=""):
             pass
     
     elif arch == "arm64":
-        collected["syscall"] = selectedSyscall[0]
+        collected["svc #0"] = selectedSyscall[0]
         collected["x8"] = selectedSyscall[1]
         collected["x0"] = selectedSyscall[2]
         collected["x1"] = selectedSyscall[3]
@@ -59,7 +47,7 @@ def _syscallLookup(key, arch, scraped=""):
         collected["x5"] = selectedSyscall[7]
 
     elif arch == "powerPC":
-        collected["syscall"] = selectedSyscall[0]
+        collected["sc"] = selectedSyscall[0]
         collected["r0"] = key
         collected["r3"] = selectedSyscall[1]
         collected["r4"] = selectedSyscall[2]
@@ -77,38 +65,78 @@ def _syscallLookup(key, arch, scraped=""):
         collected["a3"] = selectedSyscall[4]
         collected["a4"] = selectedSyscall[5]
         collected["a5"] = selectedSyscall[6]
+    
+    elif arch == "mips32":
+        collected["syscall"] = selectedSyscall[0]
+        collected["v0"] = key
+        collected["a0"] = selectedSyscall[1]
+        collected["a1"] = selectedSyscall[2]
+        collected["a2"] = selectedSyscall[3]
+        collected["a3"] = selectedSyscall[4]
+        collected["a4"] = selectedSyscall[5]
+        collected["a5"] = selectedSyscall[6]
+    
+    elif arch == "mipso32":
+        collected["syscall"] = selectedSyscall[0]
+        collected["v0"] = key
+        collected["a0"] = selectedSyscall[1]
+        collected["a1"] = selectedSyscall[2]
+        collected["a2"] = selectedSyscall[3]
+        collected["a3"] = selectedSyscall[4]
+        collected["stack1"] = selectedSyscall[5]
+        collected["stack2"] = selectedSyscall[6]
+
+    elif arch == "sparc64":
+        collected["t 0x6d"] = selectedSyscall[0]
+        collected["g1"] = key
+        collected["o0"] = selectedSyscall[1]
+        collected["o1"] = selectedSyscall[2]
+        collected["o2"] = selectedSyscall[3]
+        collected["o3"] = selectedSyscall[4]
+        collected["o4"] = selectedSyscall[5]
+        collected["o5"] = selectedSyscall[6]
+    
+    elif arch == "sparc32":
+        collected["t 0x10"] = selectedSyscall[0]
+        collected["g1"] = key
+        collected["o0"] = selectedSyscall[1]
+        collected["o1"] = selectedSyscall[2]
+        collected["o2"] = selectedSyscall[3]
+        collected["o3"] = selectedSyscall[4]
+        collected["o4"] = selectedSyscall[5]
+        collected["o5"] = selectedSyscall[6]
+    
+    elif arch == "ia64":
+        collected["break 0x100000"] = selectedSyscall[0]
+        collected["r15"] = key
+        collected["out0"] = selectedSyscall[1]
+        collected["out1"] = selectedSyscall[2]
+        collected["out2"] = selectedSyscall[3]
+        collected["out3"] = selectedSyscall[4]
+        collected["out4"] = selectedSyscall[5]
+        collected["out5"] = selectedSyscall[6]
 
     return collected
 
 def _reverseLookup(string, arch):
     if "pickle" not in locals():
         import pickle
+    
+    if "os" not in locals():
+        import os
+    
+    location = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
     if arch == "i386":
-        with open("syscallLookup/scrapedx64.pickle", "rb") as scrapeHandle:
+        with open(os.path.join(location, "syscallLookup/scrapedx64.pickle"), "rb") as scrapeHandle:
             scraped = pickle.load(scrapeHandle)
         reverse = {v[1]: k for k, v in scraped.items()}
     
-    elif arch == "x86_64":
-        with open("syscallLookup/scrapedx86.pickle", "rb") as scrapeHandle:
+    else:
+        with open(os.path.join(location, "syscallLookup/scraped%s.pickle" % arch), "rb") as scrapeHandle:
             scraped = pickle.load(scrapeHandle)
         reverse = {v[0]: k for k, v in scraped.items()}
     
-    elif arch == "arm64":
-        with open("syscallLookup/scrapedArm64.pickle", "rb") as scrapeHandle:
-            scraped = pickle.load(scrapeHandle)
-        reverse = {v[0]: k for k, v in scraped.items()}
-    
-    elif arch == "powerPC":
-        with open("syscallLookup/scrapedpowerpc.pickle", "rb") as scrapeHandle:
-            scraped = pickle.load(scrapeHandle)
-        reverse = {v[0]: k for k, v in scraped.items()}
-
-    elif arch == "mips64":
-        with open("syscallLookup/scrapedmips64.pickle", "rb") as scrapeHandle:
-            scraped = pickle.load(scrapeHandle)
-        reverse = {v[0]:k for k, v in scraped.items()}
-
     syscalls = []
     key = 0
     reverseMax = max(scraped)
@@ -124,14 +152,14 @@ def _reverseLookup(string, arch):
 
     return syscalls
 
-def syscall32(query="sys"):
+def syscalli386(query):
     if type(query) == str:
         return _reverseLookup(query, "i386")
     elif type(query) == int:
         return _syscallLookup(query, "i386")
     raise Exception("Invalid type: " + str(type(query)))
 
-def syscall64(query):
+def syscallx86(query):
     if type(query) == str:
         return _reverseLookup(query, "x86_64")
     elif type(query) == int:
@@ -145,7 +173,7 @@ def syscallArm64(query):
         return _syscallLookup(query, "arm64")
     raise Exception("Invalid type: " + str(type(query)))
 
-def syscallPPC(query):
+def syscallPowerPC(query):
     if type(query) == str:
         return _reverseLookup(query, "powerPC")
     elif type(query) == int:
@@ -157,4 +185,39 @@ def syscallMips64(query): #this is n64
         return _reverseLookup(query, "mips64")
     elif type(query) == int:
         return _syscallLookup(query, "mips64")
+    raise Exception("Invalid type: " + str(type(query)))
+
+def syscallMips32(query):
+    if type(query) == str:
+        return _reverseLookup(query, "mips32")
+    elif type(query) == int:
+        return _syscallLookup(query, "mips32")
+    raise Exception("Invalid type: " + str(type(query)))
+
+def syscallMipso32(query):
+    if type(query) == str:
+        return _reverseLookup(query, "mipso32")
+    elif type(query) == int:
+        return _syscallLookup(query, "mipso32")
+    raise Exception("Invalid type: " + str(type(query)))
+
+def syscallSparc64(query):
+    if type(query) == str:
+        return _reverseLookup(query, "sparc64")
+    elif type(query) == int:
+        return _syscallLookup(query, "sparc64")
+    raise Exception("Invalid type: " + str(type(query)))
+
+def syscallSparc32(query):
+    if type(query) == str:
+        return _reverseLookup(query, "sparc32")
+    elif type(query) == int:
+        return _syscallLookup(query, "sparc32")
+    raise Exception("Invalid type: " + str(type(query)))
+
+def syscallia64(query):
+    if type(query) == str:
+        return _reverseLookup(query, "ia64")
+    elif type(query) == int:
+        return _syscallLookup(query, "ia64")
     raise Exception("Invalid type: " + str(type(query)))

@@ -1,7 +1,9 @@
 # syscallDB
-## x86 and x64 syscall database
+## Syscall database
 Have you ever been doing some assembly and finding yourself looking furiously for some nisch syscall\
-Well, that will no longer be a problem with syscallDB's reverse lookup, did you forget rax for execve?
+Well, that will no longer be a problem with syscallDB's reverse lookup. It displays all relevant registers\
+For the query that is given. The database currently supports x86, i386, arm64, powerpc and mips n64.\
+More is to come. If you have any suggestion for additions or improvements, mail me at marwenn02@gmail.com 
 
 ## Usage
 ### x86
@@ -45,16 +47,6 @@ sysDB now also exists as a python package, install with
 For more regularly updated versions:
 ```sh
 git clone https://github.com/marwenn02/syscallDB/
-cd syscallDB/syscallLookup/scrape
-cd aarch64
-python3 syscallScrapeArm64.py
-cd ../i386
-python3 syscallScrapex64.py
-cd ../x86_64
-python3 syscallScrapex86.py
-cd ../powerpc/
-python3 syscallScrapePowerpc.py
-cd ../mips64/
-python3 syscallScrapeMips64.py
-cd ../../../
+cd syscallDB/
+./install.sh
 ```
