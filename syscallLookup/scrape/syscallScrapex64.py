@@ -1,6 +1,4 @@
 import requests
-import urllib.request
-from bs4 import BeautifulSoup
 import pickle
 
 url = "http://syscalls.kernelgrok.com/syscalls-2.6.35.4.js"
