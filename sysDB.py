@@ -128,7 +128,7 @@ def _reverseLookup(string, arch):
     location = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
     if arch == "i386":
-        with open(os.path.join(location, "syscallLookup/scrapedx64.pickle"), "rb") as scrapeHandle:
+        with open(os.path.join(location, "syscallLookup/scrapedi386.pickle"), "rb") as scrapeHandle:
             scraped = pickle.load(scrapeHandle)
         reverse = {v[1]: k for k, v in scraped.items()}
     
