@@ -221,3 +221,15 @@ def syscallia64(query):
     elif type(query) == int:
         return _syscallLookup(query, "ia64")
     raise Exception("Invalid type: " + str(type(query)))
+
+def sysprint(dicarr):
+    if type(dicarr) == list:
+        index = len(dicarr)
+        for dic in dicarr:
+            sysprint(dic)
+            if index != 1:
+                print("")
+            index -= 1
+        return
+    for entry in dicarr:
+        print(entry + ": " + str(dicarr[entry]))

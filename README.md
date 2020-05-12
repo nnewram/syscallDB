@@ -39,8 +39,15 @@ $ python3
 ```py
 $ python3
 >>> import sysDB
->>> sysDB.syscallPowerPC(4)
-{'syscall': 'write', 'r0': 4, 'r3': 'unsigned int fd', 'r4': 'const char *buf', 'r5': 'size_t count', 'r6': '', 'r7': '', 'r8': ''}
+>>> sysDB.sysprint(sysDB.syscallPowerPC(4))
+sc: sys_write
+r0: 4
+r3: unsigned int fd
+r4: const char *buf
+r5: size_t count
+r6: 
+r7: 
+r8:
 ```
 ### mips64
 ```py
