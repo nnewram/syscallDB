@@ -201,21 +201,21 @@ def syscallPowerPC(query):
 
 def syscallMips64(query): #this is n64
     if type(query) == str:
-        return _reverseLookup(query, "mips64")
+        return _reverseLookup(query, "mips64", 5000)
     elif type(query) == int:
         return _syscallLookup(query, "mips64")
     raise Exception("Invalid type: " + str(type(query)))
 
 def syscallMips32(query):
     if type(query) == str:
-        return _reverseLookup(query, "mips32")
+        return _reverseLookup(query, "mips32", 6000)
     elif type(query) == int:
         return _syscallLookup(query, "mips32")
     raise Exception("Invalid type: " + str(type(query)))
 
 def syscallMipso32(query):
     if type(query) == str:
-        return _reverseLookup(query, "mipso32")
+        return _reverseLookup(query, "mipso32", 4000)
     elif type(query) == int:
         return _syscallLookup(query, "mipso32")
     raise Exception("Invalid type: " + str(type(query)))
