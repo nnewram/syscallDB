@@ -7,7 +7,7 @@ def _syscallLookup(key, arch, scraped=None):
             import os
         
         location = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
-            
+        
         with open(os.path.join(location, "syscallLookup/scraped%s.pickle" % arch), "rb") as scrapeHandle:
             scraped = pickle.load(scrapeHandle)
 
@@ -15,7 +15,7 @@ def _syscallLookup(key, arch, scraped=None):
     
     selectedSyscall = scraped[key]
     if arch == "i386":
-        collected["syscall"] = selectedSyscall[1]
+        collected["int 0x80"] = selectedSyscall[1]
         collected["eax"] = key
         collected["ebx"] = selectedSyscall[4]
         collected["ecx"] = selectedSyscall[5]
@@ -35,7 +35,20 @@ def _syscallLookup(key, arch, scraped=None):
             collected["r9"] = selectedSyscall[6]
         except:
             pass
-    
+
+    elif arch == "x86_32":
+        try:
+            collected["syscall"] = selectedSyscall[0]
+            collected["ax"] = key
+            collected["di"] = selectedSyscall[1]
+            collected["si"] = selectedSyscall[2]
+            collected["dx"] = selectedSyscall[3]
+            collected["r10w"] = selectedSyscall[4]
+            collected["r8w"] = selectedSyscall[5]
+            collected["r9w"] = selectedSyscall[6]
+        except:
+            pass
+
     elif arch == "arm64":
         collected["svc #0"] = selectedSyscall[0]
         collected["x8"] = selectedSyscall[1]
@@ -118,7 +131,7 @@ def _syscallLookup(key, arch, scraped=None):
 
     return collected
 
-def _reverseLookup(string, arch):
+def _reverseLookup(string, arch, startingsyscall=0):
     if "pickle" not in locals():
         import pickle
     
@@ -131,14 +144,13 @@ def _reverseLookup(string, arch):
         with open(os.path.join(location, "syscallLookup/scrapedi386.pickle"), "rb") as scrapeHandle:
             scraped = pickle.load(scrapeHandle)
         reverse = {v[1]: k for k, v in scraped.items()}
-    
     else:
         with open(os.path.join(location, "syscallLookup/scraped%s.pickle" % arch), "rb") as scrapeHandle:
             scraped = pickle.load(scrapeHandle)
         reverse = {v[0]: k for k, v in scraped.items()}
     
     syscalls = []
-    key = 0
+    key = startingsyscall
     reverseMax = max(scraped)
 
     for x in reverse:
@@ -159,11 +171,18 @@ def syscalli386(query):
         return _syscallLookup(query, "i386")
     raise Exception("Invalid type: " + str(type(query)))
 
-def syscallx86(query):
+def syscallx86_64(query):
     if type(query) == str:
         return _reverseLookup(query, "x86_64")
     elif type(query) == int:
         return _syscallLookup(query, "x86_64")
+    raise Exception("Invalid type: " + str(type(query)))
+
+def syscallx86_32(query):
+    if type(query) == str:
+        return _reverseLookup(query, "x86_32", 0x40000000)
+    elif type(query) == int:
+        return _syscallLookup(query, "x86_32")
     raise Exception("Invalid type: " + str(type(query)))
 
 def syscallArm64(query):
