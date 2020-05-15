@@ -13,7 +13,8 @@ for syscall in syscalls:
     sysarr[0] = int(sysarr[0].split(">")[-1])
     sysarr = [x for x in sysarr if "<" not in str(x) and x != ""]
     sysdict[sysarr[0]] = sysarr[1:]
-print(sysdict)
+
+[print(sysdict[x]) for x in sysdict]
 
 with open("../../scrapedx86_64.pickle", "wb") as pickleHandle:
     pickle.dump(sysdict, pickleHandle, protocol=pickle.HIGHEST_PROTOCOL)

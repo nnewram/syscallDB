@@ -1,14 +1,15 @@
+_location = None
+
 def _syscallLookup(key, arch, scraped=None):
     if not scraped:
         if "pickle" not in locals():
             import pickle
     
-        if "os" not in locals():
+        if "os" not in locals() and "_location" not in locals():
             import os
+            _location = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
         
-        location = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
-        
-        with open(os.path.join(location, "syscallLookup/scraped%s.pickle" % arch), "rb") as scrapeHandle:
+        with open(os.path.join(_location, "syscallLookup/scraped%s.pickle" % arch), "rb") as scrapeHandle:
             scraped = pickle.load(scrapeHandle)
 
     collected = {}
@@ -135,17 +136,16 @@ def _reverseLookup(string, arch, startingsyscall=0):
     if "pickle" not in locals():
         import pickle
     
-    if "os" not in locals():
+    if "os" not in locals() and "_location" not in locals():
         import os
-    
-    location = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
+        _location = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
     if arch == "i386":
-        with open(os.path.join(location, "syscallLookup/scrapedi386.pickle"), "rb") as scrapeHandle:
+        with open(os.path.join(_location, "syscallLookup/scrapedi386.pickle"), "rb") as scrapeHandle:
             scraped = pickle.load(scrapeHandle)
         reverse = {v[1]: k for k, v in scraped.items()}
     else:
-        with open(os.path.join(location, "syscallLookup/scraped%s.pickle" % arch), "rb") as scrapeHandle:
+        with open(os.path.join(_location, "syscallLookup/scraped%s.pickle" % arch), "rb") as scrapeHandle:
             scraped = pickle.load(scrapeHandle)
         reverse = {v[0]: k for k, v in scraped.items()}
     
@@ -252,3 +252,37 @@ def sysprint(dicarr):
         return
     for entry in dicarr:
         print(entry + ": " + str(dicarr[entry]))
+
+def syscallInfo(keywords):
+    if type(keywords) == str:
+        keywords = [keywords]
+    
+    elif type(keywords) != list:
+        raise Exception("Invalid type: %s, %s needs %s" % (str(type(query)), "syscallInfo", "string or list"))
+    
+    keywords = [" " + x + " " for x in keywords]
+
+    if "pickle" not in locals():
+        import pickle
+
+    if "os" not in locals() or not _location:
+        import os
+        _location = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
+
+    with open(os.path.join(_location, "syscallLookup/syscallinfo.pickle"), "rb") as scrapeHandle:
+        sysinfo = pickle.load(scrapeHandle)
+        lookupTable = {v: k for k, v in sysinfo.items()}
+    
+    
+    validSyscalls = []
+
+    for lookup in lookupTable:
+        for kw in keywords:
+            if kw not in lookup:
+                break
+        else:
+            continue
+        validSyscalls.append(lookupTable[lookup])
+
+    return validSyscalls
+
