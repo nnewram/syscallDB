@@ -3,7 +3,7 @@
 Have you ever been doing some assembly and finding yourself looking furiously for some nisch syscall\
 Well, that will no longer be a problem with syscallDB's reverse lookup. It displays all relevant registers\
 For the query that is given. The database currently supports x86, i386, arm64, powerpc and mips n64.\
-More is to come. If you have any suggestion for additions or improvements, mail me at marwenn02@gmail.com 
+More is to come. If you have any suggestion for additions or improvements
 ## Installation
 sysDB now also exists as a python package, install with
 `python3 -m pip install sysDB`
